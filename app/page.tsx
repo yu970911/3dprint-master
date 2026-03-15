@@ -47,16 +47,21 @@ export default function TitlePage() {
 
       {/* ── Title ── */}
       <h1
-        className="text-5xl font-black text-center leading-tight mb-1"
+        className="text-4xl font-black text-center leading-tight mb-1"
         style={{
           background: "linear-gradient(160deg, #fff 30%, #90CAF9 100%)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
         }}
       >
-        プリントマスター
-        <span style={{ WebkitTextFillColor: "#64B5F6" }}>3D</span>
+        ３Dプリンターゲーム
       </h1>
+      <p
+        className="text-lg font-bold text-center mb-1"
+        style={{ color: "#64B5F6" }}
+      >
+        ～３DLab～
+      </p>
       <p className="text-white/40 text-sm mb-7">ゲームで学ぶ3Dプリンターの全て</p>
 
       {/* ── Level steps ── */}

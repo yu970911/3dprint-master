@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "プリントマスター3D",
+  title: "３DプリンターゲームÂ～３DLab～",
   description: "3Dプリンターのすべてをゲームで学ぼう！",
 };
 
