@@ -1,148 +1,128 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PrinterIllustration from "@/components/PrinterIllustration";
-import FactIcon from "@/components/FactIcon";
 
-const facts = [
-  { icon: "book",     text: "3Dプリンターは溶かしたプラスチックを\n少しずつ積み重ねて立体を作るよ！" },
-  { icon: "spool",    text: "使う材料のことを\n「フィラメント」というよ！" },
-  { icon: "house",    text: "3Dプリンターで\n本物の家も建てられるんだって！" },
-  { icon: "calendar", text: "最初の3Dプリンターは\n1984年にアメリカで発明されたよ！" },
-  { icon: "rocket",   text: "NASAは宇宙船の部品を\n3Dプリンターで作っているよ！" },
-  { icon: "heart",    text: "医療現場では義手・義足を\n3Dプリンターで作れるよ！" },
-  { icon: "rainbow",  text: "フィラメントには虹色まで！\nたくさんの色と素材があるよ！" },
-];
-
-const features = [
-  { label: "組み立て",     icon: (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <rect x="2" y="2" width="4" height="4" rx="1" stroke="currentColor" strokeWidth="1.2"/>
-      <rect x="8" y="2" width="4" height="4" rx="1" stroke="currentColor" strokeWidth="1.2"/>
-      <rect x="2" y="8" width="4" height="4" rx="1" stroke="currentColor" strokeWidth="1.2"/>
-      <rect x="8" y="8" width="4" height="4" rx="1" stroke="currentColor" strokeWidth="1.2"/>
-    </svg>
-  )},
-  { label: "データ準備", icon: (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <rect x="2" y="3" width="10" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
-      <path d="M5 7 L9 7 M7 5 L7 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-    </svg>
-  )},
-  { label: "スライス設定", icon: (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.2"/>
-      <path d="M7 4 L7 7 L9 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-    </svg>
-  )},
-  { label: "プリント", icon: (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <rect x="2" y="4" width="10" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
-      <path d="M5 2 L9 2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-      <circle cx="10" cy="7.5" r="1" fill="currentColor"/>
-    </svg>
-  )},
-  { label: "トラブル対応", icon: (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <path d="M7 2 L8.5 5.5 L12 6 L9.5 8.5 L10 12 L7 10.5 L4 12 L4.5 8.5 L2 6 L5.5 5.5 Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-    </svg>
-  )},
+const FACTS = [
+  "溶かしたプラスチックを0.2mmずつ\n積み重ねて立体を作る技術だよ",
+  "材料のことを「フィラメント」という。\nPLA・ABS・TPUなど種類が豊富",
+  "3Dプリンターで建てた家が\n世界中に登場している",
+  "1984年、チャック・ハルが\n世界初の3Dプリンターを発明した",
+  "NASAは宇宙ステーションで\n部品を3Dプリントしている",
+  "義手・義足・手術シミュレーターも\n3Dプリンターで作られている",
 ];
 
 export default function TitlePage() {
-  const [factIdx, setFactIdx] = useState(0);
-  const [fade, setFade] = useState(true);
+  const [idx, setIdx] = useState(0);
+  const [visible, setVisible] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const timerRef = useRef<any>(null);
 
   useEffect(() => {
-    const t = setInterval(() => {
-      setFade(false);
-      setTimeout(() => {
-        setFactIdx((i) => (i + 1) % facts.length);
-        setFade(true);
-      }, 300);
-    }, 4500);
-    return () => clearInterval(t);
+    const iv = setInterval(() => {
+      setVisible(false);
+      timerRef.current = setTimeout(() => {
+        setIdx((i) => (i + 1) % FACTS.length);
+        setVisible(true);
+      }, 400);
+    }, 4000);
+    return () => { clearInterval(iv); clearTimeout(timerRef.current); };
   }, []);
 
-  const fact = facts[factIdx];
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center gap-5">
-      {/* Hero illustration */}
-      <div className="animate-bounce-slow">
-        <PrinterIllustration size={160} />
+    <div className="flex flex-col items-center justify-center min-h-screen px-5">
+
+      {/* ── Hero ── */}
+      <div className="mb-4 mt-2">
+        <PrinterIllustration size={180} />
       </div>
 
-      <div>
-        <h1
-          className="text-5xl font-black mb-2 leading-tight"
-          style={{
-            background: "linear-gradient(90deg,#CE93D8,#64B5F6,#80DEEA)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          プリントマスター3D
-        </h1>
-        <p className="text-white/60 text-lg">3Dプリンターのすべてをゲームで学ぼう！</p>
-      </div>
+      {/* ── Eyebrow ── */}
+      <p
+        className="text-xs font-mono tracking-[0.25em] mb-2"
+        style={{ color: "#64B5F6", letterSpacing: "0.25em" }}
+      >
+        3D PRINTING WORKSHOP
+      </p>
 
-      {/* Feature badges */}
-      <div className="flex flex-wrap gap-2 justify-center">
-        {features.map((f) => (
-          <span
-            key={f.label}
-            className="flex items-center gap-1.5 glass px-3 py-1.5 rounded-full text-sm text-white/80"
-          >
-            {f.icon}
-            {f.label}
-          </span>
+      {/* ── Title ── */}
+      <h1
+        className="text-5xl font-black text-center leading-tight mb-1"
+        style={{
+          background: "linear-gradient(160deg, #fff 30%, #90CAF9 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+        }}
+      >
+        プリントマスター
+        <span style={{ WebkitTextFillColor: "#64B5F6" }}>3D</span>
+      </h1>
+      <p className="text-white/40 text-sm mb-7">ゲームで学ぶ3Dプリンターの全て</p>
+
+      {/* ── Level steps ── */}
+      <div className="flex items-center gap-1 mb-8">
+        {["組み立て","データ","スライス","プリント","トラブル"].map((label, i) => (
+          <div key={i} className="flex items-center">
+            <div className="flex flex-col items-center gap-1">
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
+                style={{ background: `rgba(100,181,246,${0.12 + i * 0.04})`, border: "1px solid rgba(100,181,246,0.25)", color: "#90CAF9" }}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </div>
+              <span className="text-white/30 text-[9px] font-medium whitespace-nowrap">{label}</span>
+            </div>
+            {i < 4 && (
+              <div className="w-5 h-px mb-4" style={{ background: "rgba(100,181,246,0.2)" }} />
+            )}
+          </div>
         ))}
       </div>
 
-      {/* Fact card */}
+      {/* ── Fact card ── */}
       <div
-        className="glass rounded-2xl p-5 max-w-sm w-full"
-        style={{ transition: "opacity 0.3s", opacity: fade ? 1 : 0 }}
+        className="w-full max-w-xs rounded-2xl overflow-hidden mb-8"
+        style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}
       >
-        <div className="flex justify-center mb-3">
-          <FactIcon type={fact.icon} />
+        {/* Animated progress bar */}
+        <div className="h-0.5 w-full" style={{ background: "rgba(255,255,255,0.08)" }}>
+          <div
+            key={idx}
+            className="h-full"
+            style={{
+              background: "linear-gradient(90deg,#7B2FBE,#2196F3)",
+              animation: "progress 4s linear forwards",
+            }}
+          />
         </div>
-        <div className="space-y-0.5">
-          {fact.text.split("\n").map((line, i) => (
-            <p key={i} className="text-sm text-blue-200 leading-relaxed">{line}</p>
-          ))}
-        </div>
-        <div className="flex gap-1.5 justify-center mt-3">
-          {facts.map((_, i) => (
-            <div
-              key={i}
-              className="rounded-full transition-all duration-300"
-              style={{
-                width: i === factIdx ? 16 : 6,
-                height: 6,
-                background: i === factIdx ? "#90CAF9" : "rgba(144,202,249,0.25)",
-              }}
-            />
-          ))}
+        <style>{`@keyframes progress { from { width: 0% } to { width: 100% } }`}</style>
+
+        <div className="px-5 py-4">
+          <p className="text-[10px] font-mono tracking-widest text-blue-400/60 mb-2 uppercase">
+            Did you know? {idx + 1}/{FACTS.length}
+          </p>
+          <p
+            className="text-sm text-white/85 leading-relaxed font-medium transition-opacity duration-300"
+            style={{ opacity: visible ? 1 : 0 }}
+          >
+            {FACTS[idx].split("\n").map((l, i) => <span key={i}>{l}{i === 0 && <br />}</span>)}
+          </p>
         </div>
       </div>
 
+      {/* ── CTA ── */}
       <Link
         href="/levels"
-        className="flex items-center gap-2 px-10 py-4 rounded-full text-white text-xl font-bold transition hover:-translate-y-1 hover:shadow-2xl active:translate-y-0"
-        style={{ background: "linear-gradient(135deg,#7B2FBE,#2196F3)" }}
+        className="w-full max-w-xs py-4 rounded-2xl text-white text-lg font-bold text-center transition-all hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3"
+        style={{ background: "linear-gradient(135deg, #7B2FBE 0%, #2196F3 100%)" }}
       >
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-          <path d="M11 2 C11 2 18 6 18 13 L11 20 L4 13 C4 6 11 2 11 2Z" fill="white" opacity="0.9"/>
-          <circle cx="11" cy="11" r="3" fill="#7B2FBE"/>
-          <path d="M4 13 L1 18 L5 16Z" fill="white" opacity="0.6"/>
-          <path d="M18 13 L21 18 L17 16Z" fill="white" opacity="0.6"/>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <polygon points="6,3 17,10 6,17" fill="white" />
         </svg>
-        ゲームスタート！
+        ゲームスタート
       </Link>
 
-      <p className="text-white/30 text-xs">全5レベル　子供から大人まで楽しめる</p>
+      <p className="text-white/20 text-xs mt-4">全5レベル · 約15分</p>
     </div>
   );
 }
