@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useGameStore, LEVELS } from "@/lib/gameStore";
+import LevelIcon from "@/components/LevelIcon";
 
 export default function CompletePage() {
   const { scores, completedLevels } = useGameStore();
@@ -28,7 +29,7 @@ export default function CompletePage() {
       <div className="grid grid-cols-2 gap-3 w-full max-w-sm">
         {LEVELS.map((lv) => (
           <div key={lv.id} className="glass rounded-xl p-4 text-center">
-            <div className="text-2xl mb-1">{lv.icon}</div>
+            <div className="flex justify-center mb-1"><LevelIcon id={lv.id} color={lv.color} size={32} /></div>
             <div className="text-2xl font-bold text-yellow-400">{scores[lv.id] ?? 0}</div>
             <div className="text-xs text-white/50">LV{lv.id} {lv.name}</div>
           </div>
